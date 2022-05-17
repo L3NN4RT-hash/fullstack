@@ -63,7 +63,6 @@ const App = () => {
       <Header head={course.name}/>
       <Content list={course.parts}/>
       <Total list={course.parts} />
-      {counter}
     </div>
   )
 }
