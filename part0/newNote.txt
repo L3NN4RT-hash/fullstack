@@ -1,0 +1,12 @@
+Build with websequencediagrams.com
+
+title User created note
+note over Browser: Submit button pressed
+Browser->Server: User input, HTTP POST
+Server->Browser: URL redirect (Code 302)
+Browser->Server: HTTP GET to new address
+note over Browser: Browser reload Notes page
+Browser->Server: Three HTTP requests
+Server->Browser: main.css
+Server->Browser: main.js
+Server->Browser: data.json

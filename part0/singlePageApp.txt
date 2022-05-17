@@ -1,0 +1,9 @@
+Build with websequencediagrams.com
+
+title Rendering notes page (SPA)
+Browser->Server: HTTP GET
+Server->Browser: JavaScript code
+note over Browser: Browser executes JS code
+Browser->Server: HTTP GET notes
+Server->Browser: JSON-data
+note over Browser: DOM-API to display the notes on the page

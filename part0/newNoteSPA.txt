@@ -1,0 +1,9 @@
+Build with websequencediagrams.com
+
+title User created note (SPA)
+note over Browser: Submit button pressed
+Browser->Server: User input, HTTP POST
+note over Browser: Input as JSON-data
+note over Server: Content-Type tells the server to parse JSON-data
+Server->Browser: Code 201 (no redirect)
+note over Browser: No further HTTP requests, page not reloaded
