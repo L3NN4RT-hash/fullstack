@@ -1,11 +1,9 @@
 import { useState } from 'react'
+import ShowNumbers from './components/ShowNumbers'
+import HtmlForm from './components/HtmlForm'
 import React from 'react'
 
-const ShowNumbers = ({people}) => {
- return( people.map(person => <div key={person.id}>
-    {person.name} {person.number}
-  </div>))
-}
+// Only had two components to extract
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -24,14 +22,14 @@ const App = () => {
   
 
   const hasSameName = () => {
-      var same = persons.filter((name1, index) => {
-        return name1.name === newName
-      },0) 
-      if (same.length == 0) {
-        return (false)
-      }
-      return (true)
-  }
+    var same = persons.filter((name1, index) => {
+      return name1.name === newName
+    },0) 
+    if (same.length == 0) {
+      return (false)
+    }
+    return (true)
+}
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -45,7 +43,8 @@ const App = () => {
       const nameObject = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1
+        id: persons.length + 1,
+        visible: true
       }
       setPersons(persons.concat(nameObject))
       setNewName('')
@@ -65,9 +64,12 @@ const App = () => {
   const handleSearch = (event) => {
     setNewSearch(event.target.value) 
     const input = event.target.value.toLowerCase()
-    console.log(input)
     persons.forEach(person => {
-      console.log(person.name.toLowerCase().includes(input))
+     if (!person.name.toLowerCase().includes(input)) {
+        person.visible = false
+     } else if (person.name.toLowerCase().includes(input)) {
+       person.visible = true
+     }
     })    
   } 
 
@@ -77,32 +79,9 @@ const App = () => {
       Search: <input value={search}
               onChange={handleSearch} />
       <h3>Add a new name and number</h3>
-      <form onSubmit={addPerson}>
-      <table>
-        <tbody>
-        <tr>
-          <td> name: </td>
-          <td> 
-            <input value={newName}
-          onChange={handleNameChange} /> 
-          </td>
-        </tr>
-        <tr>
-        <td> number: </td> 
-          <td>
-        <input value={newNumber}
-          onChange={handleNumberChange} />
-          </td>
-        </tr>
-        <tr>
-        <td>
-          <button type="submit">add</button>
-          </td>
-          </tr>
-          </tbody>
-      </table> 
-      </form>
-      <div>debug: {newName}</div>
+      <HtmlForm addPerson={addPerson} handleNameChange={handleNameChange} 
+      handleNumberChange={handleNumberChange} newName={newName}
+      newNumber={newNumber} />
       <h2>Numbers</h2>
       <ShowNumbers people={persons} />
     </div>
