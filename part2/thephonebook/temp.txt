@@ -1,0 +1,2 @@
+const visible = person.name.includes(input) || 
+      person.number.includes(input)
