@@ -1,25 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ShowNumbers from './components/ShowNumbers'
 import HtmlForm from './components/HtmlForm'
 import React from 'react'
+import axios from 'axios'
 
 // Only had two components to extract
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', 
-      number: 123456789,
-      id: 1,
-      visible: true
-    },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2, visible: true },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3, visible: true },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4, visible: true }
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setNewSearch] = useState('')
   
+useEffect(() => {
+  console.log('useEffect')
+  axios
+    .get('http://localhost:3001/persons')
+    .then(response => {
+      console.log('then works')
+      setPersons(response.data)
+    },)
+},[])  
+console.log('persons on list:', persons.length)
 
   const hasSameName = () => {
     var same = persons.filter((name1, index) => {
