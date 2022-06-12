@@ -3,6 +3,8 @@ import ShowNumbers from './components/ShowNumbers'
 import HtmlForm from './components/HtmlForm'
 import React from 'react'
 import axios from 'axios'
+import Numbers from './services/Numbers'
+import { getDefaultNormalizer } from '@testing-library/react'
 
 // Only had two components to extract
 
@@ -13,19 +15,16 @@ const App = () => {
   const [search, setNewSearch] = useState('')
   
 useEffect(() => {
-  console.log('useEffect')
-  axios
-    .get('http://localhost:3001/persons')
-    .then(response => {
-      console.log('then works')
-      setPersons(response.data)
+      Numbers
+      .getData()
+      .then(people => {
+      setPersons(people)
     },)
 },[])  
-console.log('persons on list:', persons.length)
 
   const hasSameName = () => {
-    var same = persons.filter((name1, index) => {
-      return name1.name === newName
+    var same = persons.filter((person, index) => {
+      return person.name === newName
     },0) 
     if (same.length == 0) {
       return (false)
@@ -33,22 +32,39 @@ console.log('persons on list:', persons.length)
     return (true)
 }
 
+const changeNumber = (name) => {
+  const personObject = persons.find(person => person.name === newName)
+  const newPersonObject = {...personObject, number: newNumber}
+  if (window.confirm(`${name} is already in phonebook. Would you like to replace the old number with this new one?`)) {
+    Numbers
+    .changeData(newPersonObject)
+    .then(response => { console.log(response);
+      setPersons(persons.map(person => person.id !== response.id ? person : response))
+      setNewName('')
+      setNewNumber('')
+    })
+  }
+}
+
   const addPerson = (event) => {
     event.preventDefault()
 
-    if (hasSameName()) {
-      return (
-        window.alert(`Im sorry, ${newName} is already in phonebook`)
-      )
-    }
-      console.log('form submit', event.target);
       const nameObject = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1,
         visible: true
+        /* Server sets id*/
       }
-      setPersons(persons.concat(nameObject))
+
+      if (hasSameName()) {
+        return (
+          changeNumber(newName)
+        )
+      }
+
+      Numbers
+      .postData(nameObject)
+      .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
       setNewName('')
       setNewNumber('')
     }
@@ -75,6 +91,15 @@ console.log('persons on list:', persons.length)
     })    
   } 
 
+  const deleteNumber = (id,name) => {
+    
+    if (window.confirm(`Do you want to delete ${name}`)) {
+      Numbers.deleteData(id)
+      setPersons(persons.filter(person => person.id !== id))
+      
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -85,7 +110,7 @@ console.log('persons on list:', persons.length)
       handleNumberChange={handleNumberChange} newName={newName}
       newNumber={newNumber} />
       <h2>Numbers</h2>
-      <ShowNumbers people={persons} />
+      {persons.map(person => <ShowNumbers key={person.id} person={person} deleteNumber={() => deleteNumber(person.id, person.name)} />)}
     </div>
   )
 }

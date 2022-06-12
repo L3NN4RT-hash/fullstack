@@ -1,0 +1,7 @@
+const id = persons.map(person => {
+    person.name === newName
+    return (
+      person.id
+    )
+  })
+  console.log(id);
