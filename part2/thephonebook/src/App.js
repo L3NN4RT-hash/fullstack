@@ -5,6 +5,8 @@ import React from 'react'
 import axios from 'axios'
 import Numbers from './services/Numbers'
 import { getDefaultNormalizer } from '@testing-library/react'
+import Success from './components/OperationSuccess'
+import Error from './components/Error'
 
 // Only had two components to extract
 
@@ -13,7 +15,9 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setNewSearch] = useState('')
-  
+  const [successMessage, setSuccessMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+
 useEffect(() => {
       Numbers
       .getData()
@@ -36,12 +40,23 @@ const changeNumber = (name) => {
   const personObject = persons.find(person => person.name === newName)
   const newPersonObject = {...personObject, number: newNumber}
   if (window.confirm(`${name} is already in phonebook. Would you like to replace the old number with this new one?`)) {
+    const nameHolder = newName
     Numbers
     .changeData(newPersonObject)
-    .then(response => { console.log(response);
+    .then(response => {
       setPersons(persons.map(person => person.id !== response.id ? person : response))
+      setSuccessMessage(`Number of ${newName} changed to ${newNumber}`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 3000)
       setNewName('')
       setNewNumber('')
+    })
+    .catch(error => {
+      setErrorMessage(`${nameHolder} doesn't exist in the phonebook or it has been removed`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 4000)
     })
   }
 }
@@ -67,6 +82,10 @@ const changeNumber = (name) => {
       .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
       setNewName('')
       setNewNumber('')
+      setSuccessMessage(`${newName} added to the phonebook`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 3000)
     }
 
   const handleNameChange = (event) => {
@@ -103,6 +122,9 @@ const changeNumber = (name) => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Success message={successMessage} />
+      <Error message={errorMessage} />
+      <br />
       Search: <input value={search}
               onChange={handleSearch} />
       <h3>Add a new name and number</h3>
