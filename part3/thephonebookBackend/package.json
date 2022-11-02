@@ -1,0 +1,26 @@
+{
+  "name": "fullstackpart3exercises",
+  "version": "1.0.0",
+  "description": "exercises for part3",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:ui": "rm -rf build && cd ../thephonebookFrontend/ && npm run build && cp -r build ../thephonebookBackend",
+    "deploy": "npm run build:ui"
+  },
+  "repository": {
+    "type": "git",
+    "url": "fullstackpart3exercises"
+  },
+  "author": "Milon",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}
