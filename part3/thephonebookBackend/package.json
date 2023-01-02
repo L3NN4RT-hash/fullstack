@@ -8,7 +8,8 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf build && cd ../thephonebookFrontend/ && npm run build && cp -r build ../thephonebookBackend",
-    "deploy": "npm run build:ui"
+    "deploy": "npm run build:ui",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -17,10 +18,13 @@
   "author": "Milon",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "express": "^4.18.1",
+    "mongoose": "^6.7.3",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^8.31.0",
     "nodemon": "^2.0.16"
   }
 }

@@ -11,6 +11,7 @@ const getData = () => {
 
 const postData = (object) => {
     const request = axios.post(url,object)
+    console.log('HEEEEEERE', request.then(response => response.data));
     return (
         request.then(response => response.data)
     )
