@@ -28,13 +28,19 @@ function App() {
       country.name.common.toLowerCase().includes(input) )
     console.log(countriesToShow)
     setShownCountries(countriesToShow)
-  } 
+  }
+  
+  const handleClick = (country) => {
+    var counts = [country]
+      setShownCountries(counts)     
+      
+  }
 
   return (
     <div>
       Find countries: <input value={search}
               onChange={handleSearch} />
-      <ShowCountries countries={shownCountries} />
+      <ShowCountries countries={shownCountries} handleClick={handleClick} />
     </div>
   );
 }
